@@ -2,6 +2,16 @@
 
 > A Vue.js project
 
+## 使用技术
+
+* vue
+* bower
+* bootstrap
+
+## 演示
+
+![demo](demo.gif)
+
 ## Build Setup
 
 ``` bash
