@@ -4,13 +4,18 @@
     <div class="list-wrapper">
       <input class="form-control" type="text" name="list" v-model="newTodo" v-on:keyup.enter="addTodo">
       <p class="help-block">Example block-level help text here.哈哈哈</p>
-      <h4>未完成</h4>
+      <h4 class="listTitle">未完成</h4>
       <ul>
-        <li v-for="todo in todos">
-          <p class="bg-primary list-text"><input type="checkbox">{{todo.text}}<button class="btn btn-primary btn-sm removebtn" type="button" @click="removeTodo($index)">X</button></p>
+        <li v-for="(todo, index) in todos">
+          <p class="bg-primary list-text"><input type="checkbox"  v-model="checked" @click="haveDo(index)">{{todo.text}}<button class="btn btn-primary btn-sm removebtn" type="button" @click="removeTodo(index)">X</button></p>
         </li>
       </ul>
-      <h4>已完成</h4>
+      <h4 class="listTitle">已完成</h4>
+      <ul>
+        <li v-for="(todo, index) in havedos">
+          {{todo.text}}
+        </li>
+      </ul>
     </div>
   </div>
 </template>
@@ -20,7 +25,10 @@ export default {
   data () {
     return {
       newTodo: '',
-      todos: []
+      things: '',
+      checked: false,
+      todos: [],
+      havedos: []
     }
   },
   methods: {
@@ -32,7 +40,15 @@ export default {
       }
     },
     removeTodo: function (index) {
+      this.things = this.todos[index].text
       this.todos.splice(index, 1)
+    },
+    haveDo: function (index) {
+      this.things = this.todos[index].text
+      this.todos.splice(index, 1)
+      this.checked = false
+      this.havedos.push({text: this.things})
+      this.things = ''
     }
   }
 }
@@ -70,5 +86,9 @@ li {
 
 .removebtn {
   float: right;
+}
+
+.listTitle {
+  text-align: left;
 }
 </style>
