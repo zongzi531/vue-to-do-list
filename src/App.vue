@@ -14,14 +14,14 @@
         <p class="help-block help-note">来添加你的备忘录吧！</p>
         <ul class="nav nav-tabs nav-justified" v-bind:class="todotabsClass" role="tablist" @click="reversetodo(todoflag)"><li role="presentation" class="active"><a href="#">未完成 <span class="badge">{{todos.length}}</span></a></li></ul>
         <ul class="list-ul" v-show="todoflag">
-          <li v-for="(todo, index) in todos" class="list-item" v-bind:class="'bg-' + todo.color" @click.stop="haveDo(index)">
-            <p class="list-text" v-bind:title="todo.text">{{todo.text}}<span class="glyphicon glyphicon-remove btn-del" @click.stop="removeTodo(index)"></span></p>
+          <li v-for="(todo, index) in todos" class="list-item" v-bind:class="'bg-' + todo.color">
+            <p class="list-text" v-bind:title="todo.text"><span class="checkbox-todo" @click.stop="haveDo(index)"></span>{{todo.text}}<span class="glyphicon glyphicon-remove btn-del" @click.stop="removeTodo(index)"></span></p>
           </li>
         </ul>
         <ul class="nav nav-tabs nav-justified" v-bind:class="havedotabsClass" role="tablist" @click="reversehavedo(havedoflag)"><li role="presentation" class="active"><a href="#">已完成 <span class="badge">{{havedos.length}}</span></a></li></ul>
         <ul class="list-ul" v-show="havedoflag">
-          <li v-for="(todo, index) in havedos" class="list-item" v-bind:class="'bg-' + todo.color" @click.stop="unDo(index)">
-            <p class="list-text" v-bind:title="todo.text"><span class="through">{{todo.text}}</span><span class="glyphicon glyphicon-remove btn-del" @click.stop="removeUndo(index)"></span></p>
+          <li v-for="(todo, index) in havedos" class="list-item" v-bind:class="'bg-' + todo.color">
+            <p class="list-text" v-bind:title="todo.text"><span class="glyphicon glyphicon-ok checkbox-havedo" @click.stop="unDo(index)"></span><span class="through">{{todo.text}}</span><span class="glyphicon glyphicon-remove btn-del" @click.stop="removeUndo(index)"></span></p>
           </li>
         </ul>
       </div>
@@ -148,7 +148,7 @@ button {
 
 .list-item {
   position: relative;
-  padding-left: 20px;
+  padding-left: 60px;
   font-size: 20px;
   height: 50px;
   line-height: 50px;
@@ -231,5 +231,32 @@ button {
   border-bottom-right-radius: 4px;
   border-bottom-left-radius: 4px;
   border-bottom: 1px solid #ddd;
+}
+
+.checkbox-todo {
+  position: absolute;
+  display: block;
+  width: 20px;
+  height: 20px;
+  border-radius: 8px;
+  border: 2px solid #2c3e50;
+  left: 20px;
+  top: 15px;
+}
+
+.checkbox-todo:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.checkbox-havedo {
+  position: absolute;
+  left: 20px;
+  top: 15px;
+  color: #ccc;
+}
+
+.checkbox-havedo:hover,
+.checkbox-havedo:hover ~ .through {
+  color: #8e8d8d;
 }
 </style>
