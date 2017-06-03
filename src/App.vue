@@ -146,6 +146,8 @@ button {
   text-align: left;
   margin-right: 60px;
   overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
   cursor: default;
 }
 
