@@ -209,15 +209,15 @@ button {
 }
 
 .tabs-bottom {
-  border-bottom-right-radius: 4px;
-  border-bottom-left-radius: 4px;
-  border-bottom: 1px solid #ddd !important;
+  border-radius: 4px !important;
+  border: 1px solid #ddd !important;
 }
 
 .nav-justified li a {
   font-size: 14px;
   text-align: left !important;
   border: none !important;
+  border-radius: 4px !important;
 }
 
 .list-ul {
