@@ -15,13 +15,14 @@
         <ul class="nav nav-tabs nav-justified" v-bind:class="todotabsClass" role="tablist" @click="reversetodo(todoflag)"><li role="presentation" class="active"><a href="#">未完成 <span class="badge">{{todos.length}}</span></a></li></ul>
         <ul class="list-ul" v-show="todoflag">
           <li v-for="(todo, index) in todos" class="list-item" v-bind:class="'bg-' + todo.color">
-            <p class="list-text" v-bind:title="todo.text"><span class="checkbox-todo" @click.stop="haveDo(index)"></span>{{todo.text}}<span class="glyphicon glyphicon-remove btn-del" @click.stop="removeTodo(index)"></span></p>
+            <p class="list-text" v-bind:title="todo.text" @click.stop="change(index)"><span class="glyphicon glyphicon-option-vertical"></span><span class="checkbox-todo" @click.stop="haveDo(index)"></span>{{todo.text}}<span class="glyphicon glyphicon-remove btn-del" @click.stop="removeTodo(index)"></span></p>
+            <input v-if="changeflag == index" class="form-control changeText" v-model="changeText" type="text" v-on:keyup.enter="changeTodo(index)">
           </li>
         </ul>
         <ul class="nav nav-tabs nav-justified" v-bind:class="havedotabsClass" role="tablist" @click="reversehavedo(havedoflag)"><li role="presentation" class="active"><a href="#">已完成 <span class="badge">{{havedos.length}}</span></a></li></ul>
         <ul class="list-ul" v-show="havedoflag">
           <li v-for="(todo, index) in havedos" class="list-item" v-bind:class="'bg-' + todo.color">
-            <p class="list-text" v-bind:title="todo.text"><span class="glyphicon glyphicon-ok checkbox-havedo" @click.stop="unDo(index)"></span><span class="through">{{todo.text}}</span><span class="glyphicon glyphicon-remove btn-del" @click.stop="removeUndo(index)"></span></p>
+            <p class="list-text" v-bind:title="todo.text"><span class="glyphicon glyphicon-option-vertical"></span><span class="glyphicon glyphicon-ok checkbox-havedo" @click.stop="unDo(index)"></span><span class="through">{{todo.text}}</span><span class="glyphicon glyphicon-remove btn-del" @click.stop="removeUndo(index)"></span></p>
           </li>
         </ul>
       </div>
@@ -35,8 +36,10 @@ export default {
   data () {
     return {
       newTodo: '',
+      changeText: '',
       todoflag: true,
       havedoflag: false,
+      changeflag: -1,
       todos: [],
       havedos: [],
       color: 0,
@@ -95,6 +98,15 @@ export default {
       this.colors[this.color].flag = ''
       this.color = index
       this.colors[index].flag = 'active'
+    },
+    change: function (index) {
+      this.changeflag = index
+    },
+    changeTodo: function (index) {
+      let changeText = this.changeText.trim()
+      this.changeflag = -1
+      this.changeText = ''
+      this.todos[index].text = changeText
     }
   }
 }
@@ -148,7 +160,7 @@ button {
 
 .list-item {
   position: relative;
-  padding-left: 60px;
+  padding-left: 70px;
   font-size: 20px;
   height: 50px;
   line-height: 50px;
@@ -240,7 +252,7 @@ button {
   height: 20px;
   border-radius: 8px;
   border: 2px solid #2c3e50;
-  left: 20px;
+  left: 30px;
   top: 15px;
 }
 
@@ -250,7 +262,7 @@ button {
 
 .checkbox-havedo {
   position: absolute;
-  left: 20px;
+  left: 30px;
   top: 15px;
   color: #ccc;
 }
@@ -258,5 +270,23 @@ button {
 .checkbox-havedo:hover,
 .checkbox-havedo:hover ~ .through {
   color: #8e8d8d;
+}
+
+.glyphicon-option-vertical {
+  position: absolute;
+  top: 15px;
+  left: 5px;
+}
+
+.glyphicon-option-vertical {
+  cursor: move;
+}
+
+.changeText {
+  position: absolute;
+  top: 8px;
+  left: 70px;
+  width: calc(100% - 130px);
+  z-index: 1;
 }
 </style>
