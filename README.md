@@ -7,10 +7,11 @@
 * vue
 * bower
 * bootstrap
+* awe-dnd
 
 ## 演示
 
-![demo](demo2.gif)
+![demo](demo3.gif)
 
 ## Build Setup
 
