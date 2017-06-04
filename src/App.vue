@@ -1,5 +1,5 @@
 <template>
-  <div id="app" class="row">
+  <div id="app" class="row" @click="changecancel">
     <div class="col-md-4"></div>
     <div class="col-md-4">
       <h1 class="title">{ To Do List }<small class="by">by Zong</small></h1>
@@ -14,15 +14,21 @@
         <p class="help-block help-note">来添加你的备忘录吧！</p>
         <ul class="nav nav-tabs nav-justified" v-bind:class="todotabsClass" role="tablist" @click="reversetodo(todoflag)"><li role="presentation" class="active"><a href="#">未完成 <span class="badge">{{todos.length}}</span></a></li></ul>
         <ul class="list-ul" v-show="todoflag">
-          <li v-for="(todo, index) in todos" class="list-item" v-bind:class="'bg-' + todo.color">
-            <p class="list-text" v-bind:title="todo.text" @click.stop="change(index)"><span class="glyphicon glyphicon-option-vertical"></span><span class="checkbox-todo" @click.stop="haveDo(index)"></span>{{todo.text}}<span class="glyphicon glyphicon-remove btn-del" @click.stop="removeTodo(index)"></span></p>
-            <input v-if="changeflag == index" class="form-control changeText" v-model="changeText" type="text" v-on:keyup.enter="changeTodo(index)">
+          <li v-for="(todo, index) in todos" class="list-item" v-bind:class="'bg-' + todo.color" v-dragging="{item:todo, list:todos, group:todo}" :key="todo.text">
+            <span class="glyphicon glyphicon-option-vertical"></span>
+            <span class="checkbox-todo" @click.stop="haveDo(index)"></span>
+            <span class="glyphicon glyphicon-remove btn-del" @click.stop="removeTodo(index)"></span>
+            <p class="list-text" v-bind:title="todo.text" @click.stop="change(index)">{{todo.text}}</p>
+            <input v-if="changeflag == index" @click.stop="change(index)" class="form-control changeText" v-model="changeText" type="text" v-on:keyup.enter="changeTodo(index)">
           </li>
         </ul>
         <ul class="nav nav-tabs nav-justified" v-bind:class="havedotabsClass" role="tablist" @click="reversehavedo(havedoflag)"><li role="presentation" class="active"><a href="#">已完成 <span class="badge">{{havedos.length}}</span></a></li></ul>
         <ul class="list-ul" v-show="havedoflag">
-          <li v-for="(todo, index) in havedos" class="list-item" v-bind:class="'bg-' + todo.color">
-            <p class="list-text" v-bind:title="todo.text"><span class="glyphicon glyphicon-option-vertical"></span><span class="glyphicon glyphicon-ok checkbox-havedo" @click.stop="unDo(index)"></span><span class="through">{{todo.text}}</span><span class="glyphicon glyphicon-remove btn-del" @click.stop="removeUndo(index)"></span></p>
+          <li v-for="(todo, index) in havedos" class="list-item" v-bind:class="'bg-' + todo.color" v-dragging="{item:todo, list:havedos, group:todo}" :key="todo.text">
+            <span class="glyphicon glyphicon-option-vertical"></span>
+            <span class="glyphicon glyphicon-ok checkbox-havedo" @click.stop="unDo(index)"></span>
+            <span class="glyphicon glyphicon-remove btn-del" @click.stop="removeUndo(index)"></span>
+            <p class="list-text" v-bind:title="todo.text"><span class="through">{{todo.text}}</span></p>
           </li>
         </ul>
       </div>
@@ -64,6 +70,15 @@ export default {
         'tabs-bottom': !this.todoflag || !this.todos.length
       }
     }
+  },
+  mounted () {
+    this.$dragging.$on('dragged', ({value}) => {
+      this.changeflag = -1
+      this.changeText = ''
+      console.log(value.item)
+      console.log(value.list)
+      console.log(value.otherData)
+    })
   },
   methods: {
     addTodo: function () {
@@ -107,6 +122,10 @@ export default {
       this.changeflag = -1
       this.changeText = ''
       this.todos[index].text = changeText
+    },
+    changecancel: function () {
+      this.changeflag = -1
+      this.changeText = ''
     }
   }
 }

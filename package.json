@@ -11,6 +11,7 @@
     "lint": "eslint --ext .js,.vue src"
   },
   "dependencies": {
+    "awe-dnd": "^0.3.0",
     "vue": "^2.3.3"
   },
   "devDependencies": {
