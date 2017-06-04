@@ -72,9 +72,12 @@ export default {
     }
   },
   mounted () {
-    this.$dragging.$on('dragged', () => {
+    this.$dragging.$on('dragged', ({value}) => {
       this.changeflag = -1
       this.changeText = ''
+      console.log(value.item)
+      console.log(value.list)
+      console.log(value.otherData)
     })
   },
   methods: {
