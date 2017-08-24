@@ -14,7 +14,7 @@
         <p class="help-block help-note">来添加你的备忘录吧！</p>
         <ul class="nav nav-tabs nav-justified" v-bind:class="todotabsClass" role="tablist" @click="reversetodo(todoflag)"><li role="presentation" class="active"><a href="#">未完成 <span class="badge">{{todos.length}}</span></a></li></ul>
         <ul class="list-ul" v-show="todoflag">
-          <li v-for="(todo, index) in todos" class="list-item" v-bind:class="'bg-' + todo.color" v-dragging="{item:todo, list:todos, group:todo}" :key="todo.text">
+          <li v-for="(todo, index) in todos" class="list-item" v-bind:class="'bg-' + todo.color" v-dragging="{item:todo, list:todos, group:'todo'}" :key="todo.text">
             <span class="glyphicon glyphicon-option-vertical"></span>
             <span class="checkbox-todo" @click.stop="haveDo(index)"></span>
             <span class="glyphicon glyphicon-remove btn-del" @click.stop="removeTodo(index)"></span>
@@ -24,11 +24,11 @@
         </ul>
         <ul class="nav nav-tabs nav-justified" v-bind:class="havedotabsClass" role="tablist" @click="reversehavedo(havedoflag)"><li role="presentation" class="active"><a href="#">已完成 <span class="badge">{{havedos.length}}</span></a></li></ul>
         <ul class="list-ul" v-show="havedoflag">
-          <li v-for="(todo, index) in havedos" class="list-item" v-bind:class="'bg-' + todo.color" v-dragging="{item:todo, list:havedos, group:todo}" :key="todo.text">
+          <li v-for="(havedo, index) in havedos" class="list-item" v-bind:class="'bg-' + havedo.color" v-dragging="{item:havedo, list:havedos, group:'havedo'}" :key="havedo.text">
             <span class="glyphicon glyphicon-option-vertical"></span>
             <span class="glyphicon glyphicon-ok checkbox-havedo" @click.stop="unDo(index)"></span>
             <span class="glyphicon glyphicon-remove btn-del" @click.stop="removeUndo(index)"></span>
-            <p class="list-text" v-bind:title="todo.text"><span class="through">{{todo.text}}</span></p>
+            <p class="list-text" v-bind:title="havedo.text"><span class="through">{{havedo.text}}</span></p>
           </li>
         </ul>
       </div>
@@ -132,7 +132,7 @@ export default {
 </script>
 
 <style>
-@import '../static/normalize-css/normalize.css';
+@import '../static/normalize.css';
 @import '../static/bootstrap/dist/css/bootstrap.min.css';
 
 ul {
