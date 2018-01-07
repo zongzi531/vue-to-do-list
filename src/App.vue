@@ -2,7 +2,7 @@
   <div id="app" class="row" @click="changecancel">
     <div class="col-md-4"></div>
     <div class="col-md-4">
-      <h1 class="title">{ To Do List }<small class="by">by Zong</small></h1>
+      <Title :title="title" :author="author"></Title>
       <div class="list-wrapper">
         <div class="input-group">
           <input class="form-control" type="text" name="list" v-model="newTodo" v-on:keyup.enter="addTodo">
@@ -38,102 +38,107 @@
 </template>
 
 <script>
-export default {
-  data () {
-    return {
-      newTodo: '',
-      changeText: '',
-      todoflag: true,
-      havedoflag: false,
-      changeflag: -1,
-      todos: [],
-      havedos: [],
-      color: 0,
-      colors: [
-        {color: 'default', flag: 'active'},
-        {color: 'primary', flag: ''},
-        {color: 'success', flag: ''},
-        {color: 'info', flag: ''},
-        {color: 'warning', flag: ''},
-        {color: 'danger', flag: ''}
-      ]
-    }
-  },
-  computed: {
-    havedotabsClass: function () {
+  import Title from './components/Title'
+
+  export default {
+    data () {
       return {
-        'tabs-bottom': !this.havedoflag || !this.havedos.length
+        title: '{ To Do List }',
+        author: 'by Zong',
+        newTodo: '',
+        changeText: '',
+        todoflag: true,
+        havedoflag: false,
+        changeflag: -1,
+        todos: [],
+        havedos: [],
+        color: 0,
+        colors: [
+          {color: 'default', flag: 'active'},
+          {color: 'primary', flag: ''},
+          {color: 'success', flag: ''},
+          {color: 'info', flag: ''},
+          {color: 'warning', flag: ''},
+          {color: 'danger', flag: ''}
+        ]
       }
     },
-    todotabsClass: function () {
-      return {
-        'tabs-bottom': !this.todoflag || !this.todos.length
-      }
-    }
-  },
-  mounted () {
-    this.$dragging.$on('dragged', ({value}) => {
-      this.changeflag = -1
-      this.changeText = ''
-      console.log(value.item)
-      console.log(value.list)
-      console.log(value.otherData)
-    })
-  },
-  methods: {
-    addTodo: function () {
-      let text = this.newTodo.trim()
-      let color = this.colors[this.color].color
-      if (text) {
-        this.todos.push({text: text, color: color})
-        this.newTodo = ''
+    computed: {
+      havedotabsClass: function () {
+        return {
+          'tabs-bottom': !this.havedoflag || !this.havedos.length
+        }
+      },
+      todotabsClass: function () {
+        return {
+          'tabs-bottom': !this.todoflag || !this.todos.length
+        }
       }
     },
-    removeTodo: function (index) {
-      this.todos.splice(index, 1)
+    mounted () {
+      this.$dragging.$on('dragged', ({value}) => {
+        this.changeflag = -1
+        this.changeText = ''
+        console.log(value.item)
+        console.log(value.list)
+        console.log(value.otherData)
+      })
     },
-    removeUndo: function (index) {
-      this.havedos.splice(index, 1)
+    methods: {
+      addTodo: function () {
+        let text = this.newTodo.trim()
+        let color = this.colors[this.color].color
+        if (text) {
+          this.todos.push({text: text, color: color})
+          this.newTodo = ''
+        }
+      },
+      removeTodo: function (index) {
+        this.todos.splice(index, 1)
+      },
+      removeUndo: function (index) {
+        this.havedos.splice(index, 1)
+      },
+      haveDo: function (index) {
+        this.havedos.push({text: this.todos[index].text, color: this.todos[index].color})
+        this.todos.splice(index, 1)
+      },
+      unDo: function (index) {
+        this.todos.push({text: this.havedos[index].text, color: this.havedos[index].color})
+        this.havedos.splice(index, 1)
+      },
+      reversetodo: function (val) {
+        this.todoflag = !val
+      },
+      reversehavedo: function (val) {
+        this.havedoflag = !val
+      },
+      havecolor: function (index) {
+        this.colors[this.color].flag = ''
+        this.color = index
+        this.colors[index].flag = 'active'
+      },
+      change: function (index) {
+        this.changeflag = index
+      },
+      changeTodo: function (index) {
+        let changeText = this.changeText.trim()
+        this.changeflag = -1
+        this.changeText = ''
+        this.todos[index].text = changeText
+      },
+      changecancel: function () {
+        this.changeflag = -1
+        this.changeText = ''
+      }
     },
-    haveDo: function (index) {
-      this.havedos.push({text: this.todos[index].text, color: this.todos[index].color})
-      this.todos.splice(index, 1)
-    },
-    unDo: function (index) {
-      this.todos.push({text: this.havedos[index].text, color: this.havedos[index].color})
-      this.havedos.splice(index, 1)
-    },
-    reversetodo: function (val) {
-      this.todoflag = !val
-    },
-    reversehavedo: function (val) {
-      this.havedoflag = !val
-    },
-    havecolor: function (index) {
-      this.colors[this.color].flag = ''
-      this.color = index
-      this.colors[index].flag = 'active'
-    },
-    change: function (index) {
-      this.changeflag = index
-    },
-    changeTodo: function (index) {
-      let changeText = this.changeText.trim()
-      this.changeflag = -1
-      this.changeText = ''
-      this.todos[index].text = changeText
-    },
-    changecancel: function () {
-      this.changeflag = -1
-      this.changeText = ''
+    components: {
+      Title
     }
   }
-}
 </script>
 
 <style>
-@import '../static/normalize.css';
-@import '../static/bootstrap/dist/css/bootstrap.min.css';
 
 ul {
   padding: 0;
