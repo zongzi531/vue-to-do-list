@@ -12,3 +12,19 @@ export const colors = [
   { color: 'warning', flag: '' },
   { color: 'danger', flag: '' }
 ]
+
+export const activeColor = 'active'
+
+export const labelTodos = '未完成'
+
+export const labelHavedos = '已完成'
+
+export const todosGroup = 'todos'
+
+export const havedosGroup = 'havedos'
+
+export const ONE = 1
+
+export const MinusONE = -1
+
+export const NullString = ''
