@@ -1,149 +1,72 @@
 <template>
-  <div id="app" class="row">
-    <div class="col-md-4"></div>
-    <div class="col-md-4">
-      <Title :title="title" :author="author"></Title>
-      <div class="list-wrapper">
-        <Input v-model="newTodo" @submit="addTodo"></Input>
-        <ColorBtn :colors="colors" @choice="havecolor"></ColorBtn>
-        <HelpNote :note="helpNote"></HelpNote>
-        <List
-          :label="labelTodos"
-          :todos="todos"
-          :showFlag="todoflag"
-          :group="todosGroup"
-          :isToDos="true"
-          :changeflag="changeflag"
-          v-model="changeText"
-          @on-Click="reversetodo"
-          @on-Change="haveDo"
-          @on-Del="removeTodo"
-          @on-Blur="changecancel"
-          @on-Edit="change"
-          @on-Submit="changeTodo">
-        </List>
-        <List
-          :label="labelHavedos"
-          :todos="havedos"
-          :showFlag="havedoflag"
-          :group="havedosGroup"
-          :isToDos="false"
-          :changeflag="changeflag"
-          @on-Click="reversehavedo"
-          @on-Change="unDo"
-          @on-Del="removeUndo">
-        </List>
-      </div>
-    </div>
-    <div class="col-md-4"></div>
-  </div>
+  <v-app dark>
+    <Navigation app :show="navigation" @on-change="navChange"/>
+    <Toolbar app @side="navigationOpen" @add="add"/>
+    <Content :data="todos" @delete="del" @edit="edit" @done="done" />
+    <Footer app />
+    <Dialog :show="dialog" @close="close" @save="save"/>
+    <!-- <Snackbar :show="snackbar" text="Coming soon..." @close="snackbarClose" /> -->
+  </v-app>
 </template>
 
-<script>
-  import Title from './components/Title'
-  import Input from './components/Input'
-  import ColorBtn from './components/ColorBtn'
-  import HelpNote from './components/HelpNote'
-  import List from './components/List'
+<script lang="ts">
+import { Component, Vue } from 'vue-property-decorator';
+import Navigation from '@/components/Navigation.vue';
+import Toolbar from '@/components/Toolbar.vue';
+import Content from '@/components/Content.vue';
+import Footer from '@/components/Footer.vue';
+import Dialog from '@/components/Dialog.vue';
+import Snackbar from '@/components/Snackbar.vue';
+import { ITodo, todos } from '@/components/Card.vue';
 
-  import { title, author, helpNote, colors, labelTodos, labelHavedos, activeColor, ONE, MinusONE, NullString, todosGroup, havedosGroup } from './config'
+@Component({
+  components: {
+    Navigation,
+    Toolbar,
+    Content,
+    Footer,
+    Dialog,
+    Snackbar,
+  },
+})
+export default class App extends Vue {
 
-  export default {
-    data () {
-      return {
-        title,
-        author,
-        helpNote,
-        colors,
-        labelTodos,
-        labelHavedos,
-        todosGroup,
-        havedosGroup,
-        newTodo: '',
-        changeText: '',
-        todoflag: true,
-        havedoflag: false,
-        changeflag: -1,
-        todos: [],
-        havedos: [],
-        color: 0,
-        keyIndex: 0
-      }
-    },
-    mounted () {
-      this.$dragging.$on('dragged', ({value}) => {
-        this.changeflag = MinusONE
-        this.changeText = NullString
-        // console.log(value.item)
-        // console.log(value.list)
-        // console.log(value.otherData)
-      })
-    },
-    methods: {
-      addTodo () {
-        const text = this.newTodo.trim()
-        const color = this.colors[this.color].color
-        const key = `${text}${color}${this.keyIndex++}`
-        if (text) {
-          this.todos.push({text, color, key})
-          this.newTodo = NullString
-        }
-      },
-      removeTodo (index) {
-        this.todos.splice(index, ONE)
-      },
-      removeUndo (index) {
-        this.havedos.splice(index, ONE)
-      },
-      haveDo (index) {
-        const text = this.todos[index].text
-        const color = this.todos[index].color
-        this.havedos.push({text, color})
-        this.todos.splice(index, ONE)
-      },
-      unDo (index) {
-        const text = this.havedos[index].text
-        const color = this.havedos[index].color
-        this.todos.push({text, color})
-        this.havedos.splice(index, ONE)
-      },
-      reversetodo (val) {
-        this.todoflag = !val
-      },
-      reversehavedo (val) {
-        this.havedoflag = !val
-      },
-      havecolor (index) {
-        this.colors[this.color].flag = NullString
-        this.color = index
-        this.colors[index].flag = activeColor
-      },
-      change (index) {
-        this.changeflag = index
-        const text = this.todos[index].text
-        this.changeText = text
-      },
-      changeTodo (index) {
-        const changeText = this.changeText.trim()
-        this.changeflag = MinusONE
-        this.changeText = NullString
-        this.todos[index].text = changeText
-      },
-      changecancel () {
-        this.changeflag = MinusONE
-        this.changeText = NullString
-      }
-    },
-    components: {
-      Title,
-      Input,
-      ColorBtn,
-      HelpNote,
-      List
-    }
+  private dialog: boolean = false;
+  private snackbar: boolean = false;
+  private navigation: boolean = false;
+  private todos: todos = [];
+
+  private add() {
+    this.dialog = true;
   }
-</script>
 
-<style>
-  @import '../static/css/app.css'
-</style>
+  private close() {
+    this.dialog = false;
+  }
+
+  private save(todo: ITodo) {
+    this.todos.push(todo);
+    this.dialog = false;
+  }
+
+  private navigationOpen() {
+    this.navigation = !this.navigation;
+    this.snackbar = true;
+  }
+
+  private snackbarClose() {
+    this.snackbar = false;
+  }
+
+  private navChange(value: boolean) {
+    this.navigation = value;
+  }
+
+  private del(index: number) {
+    this.todos.splice(index, 1);
+  }
+
+  private edit({ item, index }: { item: todos, index: number }) {}
+  private done(index: number) {}
+}
+</script>
