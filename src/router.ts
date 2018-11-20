@@ -40,6 +40,14 @@ export const routes: RouteConfig[] = [
   },
 ];
 
+if (process.env.NODE_ENV === 'production') {
+  routes.forEach((value: RouteConfig) => {
+    if (value.name && value.path) {
+      value.path = '/vue-to-do-list' + value.path;
+    }
+  });
+}
+
 export default new Router({
   mode: 'history',
   base: process.env.BASE_URL,
