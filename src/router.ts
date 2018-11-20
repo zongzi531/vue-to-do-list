@@ -45,6 +45,9 @@ if (process.env.NODE_ENV === 'production') {
     if (value.name && value.path) {
       value.path = '/vue-to-do-list' + value.path;
     }
+    if (value.path === '*' && value.redirect) {
+      value.redirect = '/vue-to-do-list' + value.redirect;
+    }
   });
 }
 
