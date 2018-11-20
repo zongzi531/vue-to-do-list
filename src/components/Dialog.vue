@@ -1,17 +1,17 @@
 <template>
-  <v-dialog v-model="show" persistent>
+  <v-dialog v-model="dialog.isShow" persistent>
     <v-card>
       <v-card-title>
-        <span class="headline">Add New Todo</span>
+        <span class="headline">{{dialog.title}}</span>
       </v-card-title>
       <v-card-text>
         <v-container grid-list-md>
           <v-layout wrap>
             <v-flex xs12 sm6 md4>
-              <v-text-field color="amber" v-model="title" label="Todo Title" clearable />
+              <v-text-field color="amber" v-model="dialog.form.title" label="Todo Title" clearable />
             </v-flex>
             <v-flex xs12 sm6 md4>
-              <v-text-field color="amber" v-model="desc" label="Todo Description" clearable />
+              <v-text-field color="amber" v-model="dialog.form.desc" label="Todo Description" clearable />
             </v-flex>
           </v-layout>
         </v-container>
@@ -26,41 +26,36 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Emit, Watch, Vue } from 'vue-property-decorator';
-import { ITodo } from '@/components/Card.vue';
+import { Component, Prop, Vue } from 'vue-property-decorator';
+import { ITodo } from '@/store/interface';
+import { TODOS, DIALOGTODOFORM } from '@/store/types';
+import { DIALOGTITLE } from '@/config';
 
 @Component
 export default class Dialog extends Vue {
 
-  @Prop({ default: false })
-  private show!: boolean;
+  private get dialog() { return this.$store.state.dialogTodoForm; }
 
-  private title: string = '';
+  private get commit() { return this.$store.commit; }
 
-  private desc: string = '';
-
-  private initDialog() {
-    this.title = '';
-    this.desc = '';
+  private close() {
+    this.commit(DIALOGTODOFORM.HIDE);
   }
 
-  @Watch('show')
-  private isShow() {
-    if (!this.show) {
-      this.initDialog();
-    }
-  }
-
-  @Emit('close')
-  private close() {}
-
-  @Emit('save')
   private save() {
-    const todo: ITodo = {
-      title: this.title,
-      desc: this.desc,
-    };
-    return todo;
+    if (this.dialog.title === DIALOGTITLE.NEW) {
+      this.commit(TODOS.ADD, {
+        title: this.dialog.form.title,
+        desc: this.dialog.form.desc,
+      });
+    } else if (this.dialog.title === DIALOGTITLE.EDIT) {
+      this.commit(TODOS.EDIT, {
+        title: this.dialog.form.title,
+        desc: this.dialog.form.desc,
+        index: this.dialog.index,
+      });
+    }
+    this.commit(DIALOGTODOFORM.HIDE);
   }
 }
 </script>

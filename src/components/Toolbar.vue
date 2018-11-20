@@ -4,7 +4,7 @@
     <v-toolbar-title class="font-weight-thin">{{title}}</v-toolbar-title>
     <v-spacer />
     <v-btn icon>
-      <v-icon @click.stop="add">add_circle</v-icon>
+      <v-icon v-if="routeName === 'Undos'" @click.stop="add">add_circle</v-icon>
     </v-btn>
   </v-toolbar>
 </template>
@@ -18,6 +18,8 @@ export default class Toolbar extends Vue {
 
   @Prop({ default: false })
   private app!: boolean;
+
+  private get routeName() { return this.$route.name; }
 
   private title: string = VIEWSTITLE.HOME;
 
