@@ -1,4 +1,4 @@
-# vue-to-do-list
+# Vue To Do List
 
 This Project base Vue 2.5, Using @vue/cli 3.1.3 building this Project.
 
