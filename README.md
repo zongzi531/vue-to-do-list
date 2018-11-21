@@ -1,5 +1,18 @@
 # vue-to-do-list
 
+This Project base Vue 2.5, Using @vue/cli 3.1.3 building this Project.
+
+[Link >>](https://zongzi531.com/vue-to-do-list)
+
+## Technology Stack
+
+* Vue
+* Typescript
+* @vue/cli 3.x
+* vue-router
+* vuex
+* sass
+
 ## Project setup
 ```
 npm install
