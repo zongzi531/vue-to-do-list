@@ -1,11 +1,11 @@
 import { expect } from 'chai';
-import { mount, shallowMount } from '@vue/test-utils';
+import { mount } from '@vue/test-utils';
 import Card from '@/components/Card.vue';
 import { TODOTYPE } from '@/config';
 
 describe('Card.vue', () => {
-  it('renders props.item has not values', () => {
-    const wrapper = shallowMount(Card);
+  it('renders props.item has not values when passed', () => {
+    const wrapper = mount(Card);
     const haveClassGrey = wrapper.findAll('.grey--text');
     const haveEditBtn = wrapper.findAll({ name: 'v-btn' }).filter((w: any) => w.text() === 'edit');
     const doneBtnText = wrapper.findAll({ name: 'v-btn' }).at(2).text();
@@ -16,13 +16,13 @@ describe('Card.vue', () => {
     expect(wrapper.props().item.desc).to.equal('');
   });
 
-  it('renders props.item has values', () => {
+  it('renders props.item has values when passed', () => {
     const item = {
       title: 'test',
       desc: 'desc',
       type: TODOTYPE.HAVEDO,
     };
-    const wrapper = shallowMount(Card, {
+    const wrapper = mount(Card, {
       propsData: { item },
     });
     const haveClassGrey = wrapper.findAll('.grey--text');
@@ -34,7 +34,7 @@ describe('Card.vue', () => {
     expect(wrapper.props().item).to.equal(item);
   });
 
-  it('renders and check click delect button', () => {
+  it('renders delect button and check click event when passed', () => {
     const wrapper = mount(Card);
     const btn = wrapper.findAll({ name: 'v-btn' }).at(0);
     expect(btn.text()).to.equal('delete');
@@ -42,7 +42,7 @@ describe('Card.vue', () => {
     expect(wrapper.emitted().delete.length).to.equal(1);
   });
 
-  it('renders and check click edit button', () => {
+  it('renders edit button and check click event when passed', () => {
     const wrapper = mount(Card);
     const btn = wrapper.findAll({ name: 'v-btn' }).at(1);
     expect(btn.text()).to.equal('edit');
@@ -50,7 +50,7 @@ describe('Card.vue', () => {
     expect(wrapper.emitted().edit.length).to.equal(1);
   });
 
-  it('check click done/return button', () => {
+  it('check done/return button click event when passed', () => {
     const wrapper = mount(Card);
     const btn = wrapper.findAll({ name: 'v-btn' }).at(2);
     btn.trigger('click');

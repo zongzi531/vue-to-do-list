@@ -1,15 +1,13 @@
 import { MutationTree } from 'vuex';
-import { DIALOGTODOFORM } from '@/store/types/dialogTodoForm';
+import { DIALOGTODOFORM } from '@/store/types';
 import { IStore, IForm } from '@/store/interface';
 import { DIALOGTITLE } from '@/config';
 
 export const dialogTodoFormMutations: MutationTree<IStore> = {
   [DIALOGTODOFORM.SHOW](state, payload: IForm = { title: '', desc: '' }) {
     const { title, desc } = payload;
-    if (title || desc) {
-      state.dialogTodoForm.form.title = title;
-      state.dialogTodoForm.form.desc = desc;
-    }
+    if (title) { state.dialogTodoForm.form.title = title; }
+    if (desc) { state.dialogTodoForm.form.desc = desc; }
     state.dialogTodoForm.isShow = true;
   },
   [DIALOGTODOFORM.HIDE](state) {

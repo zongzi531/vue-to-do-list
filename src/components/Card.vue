@@ -8,7 +8,7 @@
     </v-card-title>
 
     <v-card-actions>
-      <div class="spacer" />
+      <v-spacer />
       <v-btn flat color="red" @click.stop="del">delete</v-btn>
       <v-btn flat color="info" @click.stop="edit" v-if="item.type === UNDO">edit</v-btn>
       <v-btn flat color="amber" @click.stop="done">{{item.type === UNDO ? 'done' : 'return'}}</v-btn>

@@ -1,5 +1,5 @@
 import { MutationTree } from 'vuex';
-import { TODOS } from '@/store/types/todos';
+import { TODOS } from '@/store/types';
 import { IStore, ITodo, ITodoAndIndex } from '@/store/interface';
 import { TODOTYPE } from '@/config';
 
