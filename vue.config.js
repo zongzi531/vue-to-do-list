@@ -5,6 +5,9 @@ module.exports = {
     ? '/vue-to-do-list/'
     : '/',
   chainWebpack: config => {
+    // https://github.com/vuetifyjs/vuetify/issues/4068
+    // config.resolve.alias
+    //   .set('vue$', path.resolve(__dirname, './node_modules/vue/dist/vue.runtime.esm.js'))
     if (process.env.NODE_ENV !== 'test') {
       config.devtool('eval')
       config.module
